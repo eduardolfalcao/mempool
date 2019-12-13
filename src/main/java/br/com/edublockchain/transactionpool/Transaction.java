@@ -113,9 +113,9 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 
 	@Override
 	public int compareTo(Transaction t) {
-		if(this.fee > t.getFee())
-			return 1;
 		if(this.fee < t.getFee())
+			return 1;
+		if(this.fee > t.getFee())
 			return -1;
 		return 0;
 	}
