@@ -24,6 +24,11 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 		this.creationTime = new Date(System.currentTimeMillis());
 	}
 	
+	public Transaction(String sender, String receiver, double amount, double fee, Date creationTime) {
+		this(sender, receiver, amount, fee);
+		this.creationTime = creationTime;
+	}
+	
 	@Override
 	public String toString() {
 		return "\nSender: "+sender+"; Receiver: "+receiver+"; Amount: "+amount+"; Creation time: "+formatter.format(creationTime);

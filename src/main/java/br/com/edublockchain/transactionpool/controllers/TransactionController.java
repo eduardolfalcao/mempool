@@ -5,7 +5,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +25,29 @@ public class TransactionController {
 	private TransactionService service;
 	
 	@PostMapping
-	public ResponseEntity<Transaction> create(@RequestBody TransactionDTO t) {
-		return new ResponseEntity<Transaction>(service.create(t), HttpStatus.CREATED);
+	public ResponseEntity<Transaction> create(@RequestBody TransactionDTO dto) {
+		return new ResponseEntity<Transaction>(service.create(dto), HttpStatus.CREATED);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Set<Transaction>> findAll() {
 		return new ResponseEntity<Set<Transaction>>(service.findAll(), HttpStatus.OK);
 	}
+	
+	@GetMapping("/{amount}")
+	public ResponseEntity<Set<Transaction>> getN(@PathVariable Integer amount) {
+		return new ResponseEntity<Set<Transaction>>(service.getN(amount), HttpStatus.OK);
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<?> remove(@RequestBody TransactionDTO dto) {
+		if(service.remove(dto)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
 	
 }
