@@ -22,7 +22,7 @@ public class TransactionService {
 			return null;
 	}
 
-	public Set<Transaction> findAll() {
+	public Set<Transaction> getAll() {
 		return transactions;
 	}
 

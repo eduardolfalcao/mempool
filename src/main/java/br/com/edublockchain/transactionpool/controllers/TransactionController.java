@@ -30,8 +30,8 @@ public class TransactionController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Set<Transaction>> findAll() {
-		return new ResponseEntity<Set<Transaction>>(service.findAll(), HttpStatus.OK);
+	public ResponseEntity<Set<Transaction>> getAll() {
+		return new ResponseEntity<Set<Transaction>>(service.getAll(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{amount}")
