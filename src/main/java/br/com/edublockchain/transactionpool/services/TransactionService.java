@@ -16,8 +16,10 @@ public class TransactionService {
 
 	public Transaction create(TransactionDTO dto) {
 		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee());
-		if (transactions.add(t))
+		if (transactions.add(t)) {
+			System.out.println(t);
 			return t;
+		}
 		else
 			return null;
 	}
@@ -29,6 +31,9 @@ public class TransactionService {
 	public boolean remove(TransactionDTO dto) {
 		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee(),
 				dto.getCreationTime());
+		
+		System.out.println("******: "+t);
+		
 		return transactions.remove(t);
 	}
 

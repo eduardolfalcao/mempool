@@ -23,7 +23,7 @@ public class MockUtils {
 	
 	// class variable
 	final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
-	final static int DELAY = 30;	
+	final static int DELAY = 60;	
 	final Random rand;
 	
 	
