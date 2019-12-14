@@ -4,23 +4,26 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Transaction implements Comparable<Transaction>, Serializable{
 
 	private static final long serialVersionUID = -8270876610064570814L;
 
-	private SimpleDateFormat formatter;
+	public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 	
 	private String sender;
 	private String receiver;
 	private double amount, fee;
+	
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
 	private Date creationTime;
 	
 	public Transaction(String sender, String receiver, double amount, double fee) {
 		this.sender = sender;
 		this.receiver = receiver;
 		this.amount = amount;
-		this.fee = fee;
-		this.formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+		this.fee = fee;;
 		this.creationTime = new Date(System.currentTimeMillis());
 	}
 	
@@ -31,7 +34,7 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 	
 	@Override
 	public String toString() {
-		return "\nSender: "+sender+"; Receiver: "+receiver+"; Amount: "+amount+"; Creation time: "+formatter.format(creationTime);
+		return "\nSender: "+sender+"; Receiver: "+receiver+"; Amount: "+amount+"; Fee: "+fee+"; Creation time: "+formatter.format(creationTime);
 	}
 	
 	public String getSender() {
