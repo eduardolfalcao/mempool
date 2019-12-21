@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import br.com.edublockchain.transactionpool.Transaction;
@@ -11,13 +12,15 @@ import br.com.edublockchain.transactionpool.dto.TransactionDTO;
 
 @Service
 public class TransactionService {
+	
+	static Logger logger = Logger.getLogger(TransactionService.class);
 
 	private Set<Transaction> transactions = new TreeSet<Transaction>();
 
 	public Transaction create(TransactionDTO dto) {
 		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee());
 		if (transactions.add(t)) {
-			System.out.println(t);
+			logger.info("Transaction has just been added to the pool: "+t);
 			return t;
 		}
 		else
@@ -32,7 +35,7 @@ public class TransactionService {
 		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee(),
 				dto.getCreationTime());
 		
-		System.out.println("******: "+t);
+		logger.info("Transaction has just been removed from the pool: "+t);
 		
 		return transactions.remove(t);
 	}
