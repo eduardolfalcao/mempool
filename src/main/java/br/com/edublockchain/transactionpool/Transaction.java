@@ -3,6 +3,7 @@ package br.com.edublockchain.transactionpool;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -16,6 +17,8 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 	private String receiver;
 	private double amount, fee;
 	
+	private String uniqueID;
+	
 	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
 	private Date creationTime;
 	
@@ -25,6 +28,7 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 		this.amount = amount;
 		this.fee = fee;;
 		this.creationTime = new Date(System.currentTimeMillis());
+		this.uniqueID = UUID.randomUUID().toString();
 	}
 	
 	public Transaction(String sender, String receiver, double amount, double fee, Date creationTime) {
@@ -68,20 +72,18 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 		this.creationTime = creationTime;
 	}
 	
+	public String getUniqueID() {
+		return uniqueID;
+	}
+	
+	public void setUniqueID(String uniqueID) {
+		this.uniqueID = uniqueID;
+	}
+	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(amount);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((creationTime == null) ? 0 : creationTime.hashCode());
-		temp = Double.doubleToLongBits(fee);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((receiver == null) ? 0 : receiver.hashCode());
-		result = prime * result + ((sender == null) ? 0 : sender.hashCode());
-		return result;
-	}
+		return uniqueID.hashCode();
+	}	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -110,6 +112,11 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 			if (other.sender != null)
 				return false;
 		} else if (!sender.equals(other.sender))
+			return false;
+		if (uniqueID == null) {
+			if (other.uniqueID != null)
+				return false;
+		} else if (!uniqueID.equals(other.uniqueID))
 			return false;
 		return true;
 	}
