@@ -1,6 +1,9 @@
 package br.com.edublockchain.transactionpool.services;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -15,38 +18,40 @@ public class TransactionService {
 	
 	static Logger logger = Logger.getLogger(TransactionService.class);
 
-	private Set<Transaction> transactions = new TreeSet<Transaction>();
+	private Map<String,Transaction> transactions = new HashMap<String,Transaction>();
 
 	public Transaction create(TransactionDTO dto) {
 		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee());
-		if (transactions.add(t)) {
-			logger.info("Transaction has just been added to the pool: "+t);
-			return t;
-		}
-		else
-			return null;
+		
+		transactions.put(t.getUniqueID(),t);
+		logger.info("Transaction has just been added to the pool: "+t);
+		return t;
 	}
 
-	public Set<Transaction> getAll() {
+	public Map<String,Transaction> getAll() {
 		return transactions;
 	}
 
-	public boolean remove(TransactionDTO dto) {
+	public Transaction remove(TransactionDTO dto) {
 		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee(),
-				dto.getCreationTime(), dto.getUniqueID());
+				null, dto.getUniqueID());		
+		logger.debug("Transaction is about to be removed from the pool: "+t);
 		
-		logger.info("Transaction has just been removed from the pool: "+t);
-		
-		return transactions.remove(t);
+		return transactions.remove(t.getUniqueID());
+	}
+	
+	public Transaction remove(String uniqueID) {		
+		logger.debug("Transaction with id "+uniqueID+" is about to be removed from the pool");			
+		return transactions.remove(uniqueID);
 	}
 
 	public Set<Transaction> getN(int amount) {
 		
 		Set<Transaction> nTransactions = new TreeSet<Transaction>();
 		
-		Iterator<Transaction> it = transactions.iterator();
+		Iterator<Entry<String, Transaction>> it = transactions.entrySet().iterator();
 		while(it.hasNext() && amount > 0) {
-			nTransactions.add(it.next());
+			nTransactions.add(it.next().getValue());
 			amount--;
 		}
 		return nTransactions;

@@ -1,7 +1,9 @@
 package br.com.edublockchain.transactionpool.controllers;
 
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import br.com.edublockchain.transactionpool.services.TransactionService;
 @RequestMapping("/api/transaction")
 public class TransactionController {
 
+	static Logger logger = Logger.getLogger(TransactionController.class);
+	
 	@Autowired
 	private TransactionService service;
 	
@@ -30,8 +34,8 @@ public class TransactionController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Set<Transaction>> getAll() {
-		return new ResponseEntity<Set<Transaction>>(service.getAll(), HttpStatus.OK);
+	public ResponseEntity<Map<String,Transaction>> getAll() {
+		return new ResponseEntity<Map<String,Transaction>>(service.getAll(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{amount}")
@@ -41,7 +45,18 @@ public class TransactionController {
 	
 	@DeleteMapping
 	public ResponseEntity<?> remove(@RequestBody TransactionDTO dto) {
-		if(service.remove(dto)) {
+		if(service.remove(dto)!=null) {
+			logger.info("Transaction with id "+dto.getUniqueID()+" had just been removed from the pool");
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@DeleteMapping("/{uniqueID}")
+	public ResponseEntity<?> remove(@PathVariable String uniqueID) {
+		if(service.remove(uniqueID)!=null) {
+			logger.info("Transaction with id "+uniqueID+" had just been removed from the pool");
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

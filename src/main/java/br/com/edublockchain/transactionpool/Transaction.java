@@ -39,7 +39,12 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 	
 	@Override
 	public String toString() {
-		return "\nSender: "+sender+"; Receiver: "+receiver+"; Amount: "+amount+"; Fee: "+fee+"; Creation time: "+formatter.format(creationTime);
+		if(creationTime!=null)
+			return "\nUniqueId: "+this.uniqueID+"; Sender: "+sender+"; Receiver: "+receiver+"; Amount: "+amount+"; "
+				+ "Fee: "+fee+"; Creation time: "+formatter.format(creationTime);
+		else
+			return "\nUniqueId: "+this.uniqueID+"; Sender: "+sender+"; Receiver: "+receiver+"; Amount: "+amount+"; "
+				+ "Fee: "+fee;
 	}
 	
 	public String getSender() {
@@ -96,11 +101,6 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 			return false;
 		Transaction other = (Transaction) obj;
 		if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
-			return false;
-		if (creationTime == null) {
-			if (other.creationTime != null)
-				return false;
-		} else if (!creationTime.equals(other.creationTime))
 			return false;
 		if (Double.doubleToLongBits(fee) != Double.doubleToLongBits(other.fee))
 			return false;
