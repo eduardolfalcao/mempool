@@ -31,9 +31,10 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 		this.uniqueID = UUID.randomUUID().toString();
 	}
 	
-	public Transaction(String sender, String receiver, double amount, double fee, Date creationTime) {
+	public Transaction(String sender, String receiver, double amount, double fee, Date creationTime, String uniqueID) {
 		this(sender, receiver, amount, fee);
 		this.creationTime = creationTime;
+		this.uniqueID = uniqueID;
 	}
 	
 	@Override
@@ -129,7 +130,7 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 			return -1;
 		else{
 			//transactions are only equal if they have the same uniqueID
-			if(uniqueID == t.getUniqueID())
+			if(uniqueID.equals(t.getUniqueID()))
 				return 0;
 			else
 				return 1;

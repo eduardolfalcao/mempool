@@ -33,7 +33,7 @@ public class TransactionService {
 
 	public boolean remove(TransactionDTO dto) {
 		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee(),
-				dto.getCreationTime());
+				dto.getCreationTime(), dto.getUniqueID());
 		
 		logger.info("Transaction has just been removed from the pool: "+t);
 		
