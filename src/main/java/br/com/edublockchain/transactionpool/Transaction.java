@@ -125,9 +125,15 @@ public class Transaction implements Comparable<Transaction>, Serializable{
 	public int compareTo(Transaction t) {
 		if(this.fee < t.getFee())
 			return 1;
-		if(this.fee > t.getFee())
+		else if(this.fee > t.getFee())
 			return -1;
-		return 0;
+		else{
+			//transactions are only equal if they have the same uniqueID
+			if(uniqueID == t.getUniqueID())
+				return 0;
+			else
+				return 1;
+		}
 	}
 	
 }
