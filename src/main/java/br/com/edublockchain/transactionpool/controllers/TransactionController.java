@@ -18,7 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.edublockchain.transactionpool.Transaction;
 import br.com.edublockchain.transactionpool.dto.TransactionDTO;
 import br.com.edublockchain.transactionpool.services.TransactionService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+//http://localhost:8080/swagger-ui.html
+
+@Api(value="Transaction endpoint", tags= {"transaction-endpoint"})
 @RestController
 @RequestMapping("/api/transaction")
 public class TransactionController {
@@ -28,21 +33,25 @@ public class TransactionController {
 	@Autowired
 	private TransactionService service;
 	
+	@ApiOperation(value="Create and insert transaction into pool")
 	@PostMapping
 	public ResponseEntity<Transaction> create(@RequestBody TransactionDTO dto) {
 		return new ResponseEntity<Transaction>(service.create(dto), HttpStatus.CREATED);
 	}
 	
+	@ApiOperation(value="Get all transactions")
 	@GetMapping
 	public ResponseEntity<Map<String,Transaction>> getAll() {
 		return new ResponseEntity<Map<String,Transaction>>(service.getAll(), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value="Get a given amount of transactions")
 	@GetMapping("/{amount}")
 	public ResponseEntity<Set<Transaction>> getN(@PathVariable Integer amount) {
 		return new ResponseEntity<Set<Transaction>>(service.getN(amount), HttpStatus.OK);
 	}
 	
+	@ApiOperation(value="Remove transaction with Json body as argument")
 	@DeleteMapping
 	public ResponseEntity<?> remove(@RequestBody TransactionDTO dto) {
 		if(service.remove(dto)!=null) {
@@ -53,6 +62,7 @@ public class TransactionController {
 		}
 	}
 	
+	@ApiOperation(value="Remove transaction with uniqueID as argument")
 	@DeleteMapping("/{uniqueID}")
 	public ResponseEntity<?> remove(@PathVariable String uniqueID) {
 		if(service.remove(uniqueID)!=null) {
@@ -62,7 +72,5 @@ public class TransactionController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	
 	
 }
