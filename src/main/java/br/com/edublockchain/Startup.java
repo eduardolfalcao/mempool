@@ -9,7 +9,7 @@ import br.com.edublockchain.transactionpool.mock.MockUtils;
 public class Startup {
 	
 	public static void main(String[] args) {
-		new MockUtils();
+		//new MockUtils();
 		SpringApplication.run(Startup.class, args);		
 	}
 
