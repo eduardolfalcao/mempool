@@ -1,4 +1,4 @@
-package br.com.edublockchain.transactionpool.mock;
+package br.com.educhain.mempool.mock;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -9,13 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import br.com.edublockchain.transactionpool.dto.TransactionDTO;
-import br.com.edublockchain.transactionpool.services.TransactionService;
+import br.com.educhain.mempool.dto.TransactionDTO;
+import br.com.educhain.mempool.services.TransactionService;
 
-@Component
+//@Component
 public class MockUtils {
 	
 	@Autowired

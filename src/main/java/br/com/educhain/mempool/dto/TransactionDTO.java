@@ -1,4 +1,4 @@
-package br.com.edublockchain.transactionpool.dto;
+package br.com.educhain.mempool.dto;
 
 import java.util.Date;
 

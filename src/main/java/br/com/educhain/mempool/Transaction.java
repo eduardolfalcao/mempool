@@ -1,4 +1,4 @@
-package br.com.edublockchain.transactionpool;
+package br.com.educhain.mempool;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -28,8 +28,10 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 		this.receiver = receiver;
 		this.amount = amount;
 		this.fee = fee;
-		;
-		this.creationTime = new Date(System.currentTimeMillis());
+		this.pubKey = pubKey;
+		this.signature = signature;
+		
+		this.creationTime = new Date(System.currentTimeMillis());		
 		this.uniqueID = UUID.randomUUID().toString();
 	}
 

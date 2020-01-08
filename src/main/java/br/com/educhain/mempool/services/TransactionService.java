@@ -1,4 +1,4 @@
-package br.com.edublockchain.transactionpool.services;
+package br.com.educhain.mempool.services;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,8 +10,8 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import br.com.edublockchain.transactionpool.Transaction;
-import br.com.edublockchain.transactionpool.dto.TransactionDTO;
+import br.com.educhain.mempool.Transaction;
+import br.com.educhain.mempool.dto.TransactionDTO;
 
 @Service
 public class TransactionService {

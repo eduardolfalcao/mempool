@@ -1,4 +1,4 @@
-package br.com.edublockchain;
+package br.com.educhain;
 
 import java.util.Collections;
 
@@ -28,8 +28,8 @@ public class SwaggerConfig {
 	}
 	
 	private ApiInfo apiInfo() {
-		return new ApiInfo("Transcation Pool (MemPool)", 
-			"A pool of transcations for EduBlockchain", 
+		return new ApiInfo("Educhain MemPool)", 
+			"A pool of transactions for EduBlockchain", 
 			"v0", 
 			"",	//Terms of service URL 
 			new Contact("Eduardo Falcão", "edufalcao.wordpress.com", "eduardolfalcao@gmail.com"),

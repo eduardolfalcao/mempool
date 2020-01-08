@@ -1,4 +1,4 @@
-package br.com.edublockchain.transactionpool.controllers;
+package br.com.educhain.mempool.controllers;
 
 import java.util.Map;
 import java.util.Set;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.edublockchain.transactionpool.Transaction;
-import br.com.edublockchain.transactionpool.dto.TransactionDTO;
-import br.com.edublockchain.transactionpool.services.TransactionService;
+import br.com.educhain.mempool.Transaction;
+import br.com.educhain.mempool.dto.TransactionDTO;
+import br.com.educhain.mempool.services.TransactionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
