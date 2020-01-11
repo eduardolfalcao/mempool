@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,14 +42,14 @@ public class TransactionController {
 	
 	@ApiOperation(value="Get all transactions")
 	@GetMapping
-	public ResponseEntity<Map<String,Transaction>> getAll() {
-		return new ResponseEntity<Map<String,Transaction>>(service.getAll(), HttpStatus.OK);
+	public ResponseEntity<Map<String,Pair<Transaction, byte[]>>> getAll() {
+		return new ResponseEntity<Map<String,Pair<Transaction, byte[]>>>(service.getAll(), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="Get a given amount of transactions")
 	@GetMapping("/{amount}")
-	public ResponseEntity<Set<Transaction>> getN(@PathVariable Integer amount) {
-		return new ResponseEntity<Set<Transaction>>(service.getN(amount), HttpStatus.OK);
+	public ResponseEntity<Set<Pair<Transaction, byte[]>>> getN(@PathVariable Integer amount) {
+		return new ResponseEntity<Set<Pair<Transaction, byte[]>>>(service.getN(amount), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value="Remove transaction with Json body as argument")
