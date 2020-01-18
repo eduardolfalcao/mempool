@@ -2,6 +2,7 @@ package br.com.educhain.mempool.mock;
 
 import java.security.KeyPair;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -12,16 +13,19 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import br.com.educhain.mempool.Transaction;
 import br.com.educhain.mempool.dto.TransactionDTO;
 import br.com.educhain.mempool.services.TransactionService;
 
-//@Component
+@Component
 public class MockUtils {
 
 	@Autowired
 	private TransactionService service;
+	
+	private Base64.Encoder b64e = Base64.getEncoder();
 
 	// class variable
 	final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
@@ -80,8 +84,8 @@ public class MockUtils {
 					double amount = randomValue(10000);
 					double fee = randomValue(10000);
 
-					Transaction t = new Transaction(keys.get(indexSender).getPublic(),
-							keys.get(randomValue(1000)).getPublic(), amount, fee);
+					Transaction t = new Transaction(keys.get(indexSender).getPublic().getEncoded(),
+							keys.get(randomValue(1000)).getPublic().getEncoded(), amount, fee);
 					
 					byte[] signature = Signer.sign(t, keys.get(indexSender).getPrivate());
 

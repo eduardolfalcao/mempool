@@ -1,20 +1,38 @@
 package br.com.educhain.mempool;
 
 import java.io.Serializable;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.educhain.mempool.mock.KeyUtils;
+
 public class Transaction implements Comparable<Transaction>, Serializable {
 
 	private static final long serialVersionUID = -8270876610064570814L;
+	private static final Base64.Decoder b64d = Base64.getDecoder();	
+	private static KeyFactory keyFactory;
+	
+	static{
+		try {
+			keyFactory = KeyFactory.getInstance(KeyUtils.KEYGEN_ALGORITHM);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-	public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");	
 
-	private PublicKey sender, receiver;
+	private byte[] sender, receiver;
 	private double amount, fee;
 
 	private String uniqueID;
@@ -22,7 +40,7 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date creationTime;
 
-	public Transaction(PublicKey sender, PublicKey receiver, double amount, double fee) {
+	public Transaction(byte[] sender, byte[] receiver, double amount, double fee) {
 		this.sender = sender;
 		this.receiver = receiver;
 		this.amount = amount;
@@ -32,7 +50,7 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 		this.uniqueID = UUID.randomUUID().toString();
 	}
 
-	public Transaction(PublicKey sender, PublicKey receiver, double amount, double fee, Date creationTime,
+	public Transaction(byte[] sender, byte[] receiver, double amount, double fee, Date creationTime,
 			String uniqueID) {
 		this(sender, receiver, amount, fee);
 		this.creationTime = creationTime;
@@ -50,19 +68,28 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 					+ "; " + "Fee: " + fee + ";";
 	}
 
-	public PublicKey getSender() {
+	public byte[] getSender() {
 		return sender;
 	}
+	
+	public PublicKey getPubKey(byte[] entity) {
+		try {
+	        byte[] b = b64d.decode(entity);
+	        return keyFactory.generatePublic(new X509EncodedKeySpec(b));
+	    } catch (InvalidKeySpecException e) {
+	        throw new IllegalArgumentException(e);
+	    }
+	}
 
-	public void setSender(PublicKey sender) {
+	public void setSender(byte[] sender) {
 		this.sender = sender;
 	}
 
-	public PublicKey getReceiver() {
+	public byte[] getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(PublicKey receiver) {
+	public void setReceiver(byte[] receiver) {
 		this.receiver = receiver;
 	}
 

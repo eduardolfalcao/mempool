@@ -1,6 +1,5 @@
 package br.com.educhain.mempool.dto;
 
-import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -13,7 +12,7 @@ import lombok.Getter;
 @Getter
 public class TransactionDTO {
 	
-	private PublicKey sender, receiver;
+	private byte[] sender, receiver;
 	private double amount, fee;
 	private Date creationTime;
 	

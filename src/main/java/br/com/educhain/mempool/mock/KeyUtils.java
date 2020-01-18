@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 public class KeyUtils {
 
 	private static final Logger LOGGER = Logger.getLogger(KeyUtils.class);
-	private static final String KEYGEN_ALGORITHM = "DSA";
+	public static final String KEYGEN_ALGORITHM = "DSA";
 
 	public static KeyPair generateKeyPair(String walletOwner) {
 		KeyPairGenerator keyPairGen;
