@@ -19,7 +19,8 @@ import br.com.educhain.mempool.Transaction;
 import br.com.educhain.mempool.dto.TransactionDTO;
 import br.com.educhain.mempool.services.TransactionService;
 
-@Component
+//disabling automatic startup of mockutils
+//@Component
 public class MockUtils {
 
 	@Autowired

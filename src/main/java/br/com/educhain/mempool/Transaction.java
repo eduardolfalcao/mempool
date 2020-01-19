@@ -25,7 +25,6 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 		try {
 			keyFactory = KeyFactory.getInstance(KeyUtils.KEYGEN_ALGORITHM);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -71,15 +70,6 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 	public byte[] getSender() {
 		return sender;
 	}
-	
-	public PublicKey getPubKey(byte[] entity) {
-		try {
-	        byte[] b = b64d.decode(entity);
-	        return keyFactory.generatePublic(new X509EncodedKeySpec(b));
-	    } catch (InvalidKeySpecException e) {
-	        throw new IllegalArgumentException(e);
-	    }
-	}
 
 	public void setSender(byte[] sender) {
 		this.sender = sender;
@@ -91,6 +81,14 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 
 	public void setReceiver(byte[] receiver) {
 		this.receiver = receiver;
+	}
+	
+	public PublicKey getPubKey(byte[] key) {
+		try {
+	        return keyFactory.generatePublic(new X509EncodedKeySpec(key));
+	    } catch (InvalidKeySpecException e) {
+	        throw new IllegalArgumentException(e);
+	    }
 	}
 
 	public double getAmount() {
