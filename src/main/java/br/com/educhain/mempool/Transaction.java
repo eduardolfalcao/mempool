@@ -7,7 +7,7 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -18,7 +18,6 @@ import br.com.educhain.mempool.mock.KeyUtils;
 public class Transaction implements Comparable<Transaction>, Serializable {
 
 	private static final long serialVersionUID = -8270876610064570814L;
-	private static final Base64.Decoder b64d = Base64.getDecoder();	
 	private static KeyFactory keyFactory;
 	
 	static{
@@ -31,7 +30,7 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 
 	public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");	
 
-	private byte[] sender, receiver;
+	private byte[] sender, receiver, signature;
 	private double amount, fee;
 
 	private String uniqueID;
@@ -39,9 +38,10 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private Date creationTime;
 
-	public Transaction(byte[] sender, byte[] receiver, double amount, double fee) {
+	public Transaction(byte[] sender, byte[] receiver, byte[] signature, double amount, double fee) {
 		this.sender = sender;
 		this.receiver = receiver;
+		this.signature = signature;
 		this.amount = amount;
 		this.fee = fee;
 
@@ -49,9 +49,9 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 		this.uniqueID = UUID.randomUUID().toString();
 	}
 
-	public Transaction(byte[] sender, byte[] receiver, double amount, double fee, Date creationTime,
+	public Transaction(byte[] sender, byte[] receiver, byte[] signature, double amount, double fee, Date creationTime,
 			String uniqueID) {
-		this(sender, receiver, amount, fee);
+		this(sender, receiver, signature, amount, fee);
 		this.creationTime = creationTime;
 		this.uniqueID = uniqueID;
 	}
@@ -81,6 +81,14 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 
 	public void setReceiver(byte[] receiver) {
 		this.receiver = receiver;
+	}
+	
+	public byte[] getSignature() {
+		return signature;
+	}
+	
+	public void setSignature(byte[] signature) {
+		this.signature = signature;
 	}
 	
 	public PublicKey getPubKey(byte[] key) {
@@ -144,12 +152,17 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 		if (receiver == null) {
 			if (other.receiver != null)
 				return false;
-		} else if (!receiver.equals(other.receiver))
+		} else if (!Arrays.equals(receiver,other.receiver))
 			return false;
 		if (sender == null) {
 			if (other.sender != null)
 				return false;
-		} else if (!sender.equals(other.sender))
+		} else if (!Arrays.equals(sender,other.sender))
+			return false;
+		if (signature == null) {
+			if (other.signature != null)
+				return false;
+		} else if (!Arrays.equals(signature,other.signature))
 			return false;
 		if (uniqueID == null) {
 			if (other.uniqueID != null)

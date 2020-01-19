@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.educhain.mempool.Transaction;
 import br.com.educhain.mempool.dto.TransactionDTO;
+import br.com.educhain.mempool.exceptions.InvalidSignatureException;
 import br.com.educhain.mempool.services.TransactionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +38,12 @@ public class TransactionController {
 	@ApiOperation(value="Create and insert transaction into pool")
 	@PostMapping
 	public ResponseEntity<Transaction> create(@RequestBody TransactionDTO dto) {
-		return new ResponseEntity<Transaction>(service.create(dto), HttpStatus.CREATED);
+		try {
+			return new ResponseEntity<Transaction>(service.create(dto), HttpStatus.CREATED);
+		} catch (InvalidSignatureException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Transaction>(HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ApiOperation(value="Get all transactions")

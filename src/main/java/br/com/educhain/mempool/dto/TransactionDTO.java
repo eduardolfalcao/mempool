@@ -1,6 +1,5 @@
 package br.com.educhain.mempool.dto;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -12,12 +11,12 @@ import lombok.Getter;
 @Getter
 public class TransactionDTO {
 	
-	private byte[] sender, receiver;
+	private String sender, receiver;
 	private double amount, fee;
 	private Date creationTime;
 	
 	private String uniqueID;	
-	private byte[] signature;
+	private String signature;
 	
 	@Override
 	public int hashCode() {
@@ -60,7 +59,7 @@ public class TransactionDTO {
 		if (signature == null) {
 			if (other.signature != null)
 				return false;
-		} else if (!Arrays.equals(signature,other.signature))
+		} else if (!signature.equals(other.signature))
 			return false;
 		
 		return true;

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import br.com.educhain.mempool.Transaction;
 import br.com.educhain.mempool.dto.TransactionDTO;
+import br.com.educhain.mempool.exceptions.InvalidSignatureException;
+import br.com.educhain.mempool.mock.Signer;
 
 @Service
 public class TransactionService {
@@ -21,13 +23,18 @@ public class TransactionService {
 
 	private Map<String, Pair<Transaction, byte[]>> transactions = new HashMap<String, Pair<Transaction, byte[]>>();
 
-	public Transaction create(TransactionDTO dto) {
-		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee());
+	public Transaction create(TransactionDTO dto) throws InvalidSignatureException {
+		Transaction t = new Transaction(dto.getSender().getBytes(), dto.getReceiver().getBytes(),
+				dto.getSignature().getBytes(), dto.getAmount(), dto.getFee());
 
-		transactions.put(t.getUniqueID(), Pair.of(t, dto.getSignature()));
-		LOGGER.info("Transaction and corresponding signature have just been added to the pool: <" + t + ", "
-				+ dto.getSignature().hashCode() + ">");
-		return t;
+		if (Signer.verify(t)) {
+			transactions.put(t.getUniqueID(), Pair.of(t, dto.getSignature().getBytes()));
+			LOGGER.info("Transaction and corresponding signature have just been added to the pool: <" + t + ", "
+					+ dto.getSignature().hashCode() + ">");
+			return t;
+		} else {
+			throw new InvalidSignatureException(t);
+		}
 	}
 
 	public Map<String, Pair<Transaction, byte[]>> getAll() {
@@ -35,8 +42,8 @@ public class TransactionService {
 	}
 
 	public Pair<Transaction, byte[]> remove(TransactionDTO dto) {
-		Transaction t = new Transaction(dto.getSender(), dto.getReceiver(), dto.getAmount(), dto.getFee(), null,
-				dto.getUniqueID());
+		Transaction t = new Transaction(dto.getSender().getBytes(), dto.getReceiver().getBytes(),
+				dto.getSignature().getBytes(), dto.getAmount(), dto.getFee(), null, dto.getUniqueID());
 		LOGGER.debug("Transaction is about to be removed from the pool: " + t);
 
 		return transactions.remove(t.getUniqueID());
