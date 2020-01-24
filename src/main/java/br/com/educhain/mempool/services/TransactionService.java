@@ -1,5 +1,6 @@
 package br.com.educhain.mempool.services;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -24,8 +25,16 @@ public class TransactionService {
 	private Map<String, Pair<Transaction, byte[]>> transactions = new HashMap<String, Pair<Transaction, byte[]>>();
 
 	public Transaction create(TransactionDTO dto) throws InvalidSignatureException {
-		Transaction t = new Transaction(dto.getSender().getBytes(), dto.getReceiver().getBytes(),
-				dto.getSignature().getBytes(), dto.getAmount(), dto.getFee());
+//		
+//		System.out.println("######1: "+dto.getReceiver().getBytes().hashCode());
+//		System.out.println("######1: "+dto.getReceiver().hashCode());
+//		System.out.println("######1: "+Base64.getDecoder().decode(dto.getReceiver().getBytes()).hashCode());
+//		System.out.println("######1: "+Base64.getEncoder().encode(dto.getReceiver().getBytes()).hashCode());
+//		
+//		
+		
+		Transaction t = new Transaction(Base64.getDecoder().decode(dto.getSender()), Base64.getDecoder().decode(dto.getReceiver()),
+				Base64.getDecoder().decode(dto.getSignature()), dto.getAmount(), dto.getFee(), dto.getUniqueID());
 
 		if (Signer.verify(t)) {
 			transactions.put(t.getUniqueID(), Pair.of(t, dto.getSignature().getBytes()));
@@ -43,7 +52,7 @@ public class TransactionService {
 
 	public Pair<Transaction, byte[]> remove(TransactionDTO dto) {
 		Transaction t = new Transaction(dto.getSender().getBytes(), dto.getReceiver().getBytes(),
-				dto.getSignature().getBytes(), dto.getAmount(), dto.getFee(), null, dto.getUniqueID());
+				dto.getSignature().getBytes(), dto.getAmount(), dto.getFee(), dto.getUniqueID());
 		LOGGER.debug("Transaction is about to be removed from the pool: " + t);
 
 		return transactions.remove(t.getUniqueID());

@@ -7,8 +7,11 @@ import java.io.ObjectOutputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Arrays;
+import java.util.Base64;
 
 import org.apache.log4j.Logger;
 
@@ -40,14 +43,12 @@ public class Signer {
 	}
 	
 	public static boolean verify(Transaction trans) {
-		//let the signature of clone as null
-		Transaction transClone = new Transaction(trans.getSender(), trans.getReceiver(), null, trans.getAmount(),
-				trans.getFee(), trans.getCreationTime(), trans.getUniqueID());
-
+		
 		try {
 			Signature sign = Signature.getInstance("SHA256withDSA");
-			sign.initVerify(trans.getPubKey(trans.getSender()));
-			sign.update(convertTransactionToByteArray(transClone));
+			PublicKey key = trans.getPubKey(trans.getSender());			
+			sign.initVerify(key);
+			sign.update(convertTransactionToByteArray(trans));			
 			boolean result = sign.verify(trans.getSignature());
 			if (result) {
 				LOGGER.debug("Transaction " + trans + " had just been verified.");
@@ -63,25 +64,9 @@ public class Signer {
 		return false;
 	}
 	
-	private static byte[] convertTransactionToByteArray(Transaction trans) {
-		byte[] transInBytes = null;
-        
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput out = null;
-        try {
-          out = new ObjectOutputStream(bos);   
-          out.writeObject(trans);
-          out.flush();
-          transInBytes = bos.toByteArray();
-        } catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-          try {
-            bos.close();
-          } catch (IOException ex) {}
-        }
-        
-        return transInBytes;
+	public static byte[] convertTransactionToByteArray(Transaction trans) {
+		System.out.println("Trans: "+trans);
+		return trans.toString().getBytes();
 	}
 
 }
