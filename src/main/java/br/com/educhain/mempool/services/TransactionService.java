@@ -32,9 +32,10 @@ public class TransactionService {
 //		System.out.println("######1: "+Base64.getEncoder().encode(dto.getReceiver().getBytes()).hashCode());
 //		
 //		
-		
-		Transaction t = new Transaction(Base64.getDecoder().decode(dto.getSender()), Base64.getDecoder().decode(dto.getReceiver()),
-				Base64.getDecoder().decode(dto.getSignature()), dto.getAmount(), dto.getFee(), dto.getUniqueID());
+
+		Transaction t = new Transaction(Base64.getDecoder().decode(dto.getSender()),
+				Base64.getDecoder().decode(dto.getReceiver()), Base64.getDecoder().decode(dto.getSignature()),
+				dto.getAmount(), dto.getFee(), dto.getCreationTime(), dto.getUniqueID());
 
 		if (Signer.verify(t)) {
 			transactions.put(t.getUniqueID(), Pair.of(t, dto.getSignature().getBytes()));
@@ -52,7 +53,7 @@ public class TransactionService {
 
 	public Pair<Transaction, byte[]> remove(TransactionDTO dto) {
 		Transaction t = new Transaction(dto.getSender().getBytes(), dto.getReceiver().getBytes(),
-				dto.getSignature().getBytes(), dto.getAmount(), dto.getFee(), dto.getUniqueID());
+				dto.getSignature().getBytes(), dto.getAmount(), dto.getFee(), dto.getCreationTime(), dto.getUniqueID());
 		LOGGER.debug("Transaction is about to be removed from the pool: " + t);
 
 		return transactions.remove(t.getUniqueID());

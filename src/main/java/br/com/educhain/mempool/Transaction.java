@@ -6,7 +6,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
 
 import br.com.educhain.mempool.mock.KeyUtils;
@@ -24,15 +26,13 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 		}
 	}
 
-//	public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+	private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	private byte[] sender, receiver, signature;
 	private double amount, fee;
 
 	private String uniqueID;
-
-//	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone="UTC")
-//	private Date creationTime;
+	private long creationTime;
 
 	public Transaction(byte[] sender, byte[] receiver, byte[] signature, double amount, double fee) {
 		this.sender = sender;
@@ -41,25 +41,22 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 		this.amount = amount;
 		this.fee = fee;
 
-//		this.creationTime = new Date(System.currentTimeMillis());
+		this.creationTime = System.currentTimeMillis();
 		this.uniqueID = UUID.randomUUID().toString();
 	}
 
-	public Transaction(byte[] sender, byte[] receiver, byte[] signature, double amount, double fee, String uniqueID) {
+	public Transaction(byte[] sender, byte[] receiver, byte[] signature, double amount, double fee, long creationTime,
+			String uniqueID) {
 		this(sender, receiver, signature, amount, fee);
-//		this.creationTime = creationTime;
+		this.creationTime = creationTime;
 		this.uniqueID = uniqueID;
 	}
 
 	@Override
 	public String toString() {
-//		if (creationTime != null)
-//			return "UniqueId: " + uniqueID + "; Sender: " + Arrays.hashCode(sender) + "; Receiver: " + Arrays.hashCode(receiver)
-//					+ "; Amount: " + amount + "; " + "Fee: " + fee + "; Creation time: "
-//					+ formatter.format(creationTime) + ";";
-//		else
-			return "UniqueId: " + uniqueID + "; Sender: " + Arrays.hashCode(sender) + "; Receiver: " + Arrays.hashCode(receiver)
-					+ "; Amount: " + amount + "; " + "Fee: " + fee + ";";
+		return "UniqueId: " + uniqueID + "; Sender: " + Arrays.hashCode(sender) + "; Receiver: "
+					+ Arrays.hashCode(receiver) + "; Amount: " + amount + "; " + "Fee: " + fee + "; Creation time: "
+					+ getCreationTimeString() + ";";
 	}
 
 	public byte[] getSender() {
@@ -109,14 +106,18 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 	public void setFee(double fee) {
 		this.fee = fee;
 	}
+	
+	public String getCreationTimeString() {
+		return formatter.format(new Date(this.creationTime));
+	}
 
-//	public Date getCreationTime() {
-//		return creationTime;
-//	}
-//
-//	public void setCreationTime(Date creationTime) {
-//		this.creationTime = creationTime;
-//	}
+	public long getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(long creationTime) {
+		this.creationTime = creationTime;
+	}
 
 	public String getUniqueID() {
 		return uniqueID;
@@ -144,10 +145,12 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 			return false;
 		if (Double.doubleToLongBits(fee) != Double.doubleToLongBits(other.fee))
 			return false;
+		if (creationTime != other.creationTime)
+			return false;
 		if (receiver == null) {
 			if (other.receiver != null)
 				return false;
-		} else if (!Arrays.equals(receiver, other.receiver))
+		} else if (!Arrays.equals(sender, other.sender))
 			return false;
 		if (sender == null) {
 			if (other.sender != null)

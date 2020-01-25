@@ -92,7 +92,7 @@ public class MockUtils {
 					t.setSignature(signature);
 
 					TransactionDTO tDto = new TransactionDTO(Base64.getEncoder().encodeToString(t.getSender()),
-							Base64.getEncoder().encodeToString(t.getReceiver()), amount, fee,
+							Base64.getEncoder().encodeToString(t.getReceiver()), amount, fee, t.getCreationTime(),
 							t.getUniqueID(), Base64.getEncoder().encodeToString(signature));
 					try {
 						service.create(tDto);

@@ -2,6 +2,8 @@ package br.com.educhain.mempool.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -15,9 +17,7 @@ public class TransactionDTO {
 	
 	private String sender, receiver;
 	private double amount, fee;
-	
-//	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone="UTC")
-//	private Date creationTime;
+	private long creationTime;
 	
 	private String uniqueID;	
 	private String signature;
@@ -38,11 +38,8 @@ public class TransactionDTO {
 		TransactionDTO other = (TransactionDTO) obj;
 		if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
 			return false;
-//		if (creationTime == null) {
-//			if (other.creationTime != null)
-//				return false;
-//		} else if (!creationTime.equals(other.creationTime))
-//			return false;
+		if (creationTime != other.creationTime)
+			return false;
 		if (Double.doubleToLongBits(fee) != Double.doubleToLongBits(other.fee))
 			return false;
 		if (receiver == null) {
@@ -67,6 +64,8 @@ public class TransactionDTO {
 			return false;
 		
 		return true;
-	}	
+	}
+
+		
 	
 }
