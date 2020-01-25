@@ -42,13 +42,13 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 		this.fee = fee;
 
 //		this.creationTime = new Date(System.currentTimeMillis());
-//		this.uniqueID = UUID.randomUUID().toString();
+		this.uniqueID = UUID.randomUUID().toString();
 	}
 
 	public Transaction(byte[] sender, byte[] receiver, byte[] signature, double amount, double fee, String uniqueID) {
 		this(sender, receiver, signature, amount, fee);
 //		this.creationTime = creationTime;
-		//this.uniqueID = uniqueID;
+		this.uniqueID = uniqueID;
 	}
 
 	@Override
