@@ -25,13 +25,6 @@ public class TransactionService {
 	private Map<String, Pair<Transaction, byte[]>> transactions = new HashMap<String, Pair<Transaction, byte[]>>();
 
 	public Transaction create(TransactionDTO dto) throws InvalidSignatureException {
-//		
-//		System.out.println("######1: "+dto.getReceiver().getBytes().hashCode());
-//		System.out.println("######1: "+dto.getReceiver().hashCode());
-//		System.out.println("######1: "+Base64.getDecoder().decode(dto.getReceiver().getBytes()).hashCode());
-//		System.out.println("######1: "+Base64.getEncoder().encode(dto.getReceiver().getBytes()).hashCode());
-//		
-//		
 
 		Transaction t = new Transaction(Base64.getDecoder().decode(dto.getSender()),
 				Base64.getDecoder().decode(dto.getReceiver()), Base64.getDecoder().decode(dto.getSignature()),

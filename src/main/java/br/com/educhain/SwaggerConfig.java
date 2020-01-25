@@ -29,7 +29,7 @@ public class SwaggerConfig {
 	
 	private ApiInfo apiInfo() {
 		return new ApiInfo("Educhain MemPool)", 
-			"A pool of transactions for EduBlockchain", 
+			"A pool of transactions for Educhain", 
 			"v0", 
 			"",	//Terms of service URL 
 			new Contact("Eduardo Falcão", "edufalcao.wordpress.com", "eduardolfalcao@gmail.com"),
